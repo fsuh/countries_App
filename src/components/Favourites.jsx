@@ -7,20 +7,31 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import ListGroup from "react-bootstrap/ListGroup";
 import Row from "react-bootstrap/Row";
-import { Spinner } from "react-bootstrap";
+import { Spinner, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { initializeCountries } from "../features/countries/countriesSlice";
-import { addFavourites } from "../features/countries/favouritesSlice";
+import { clearFavourites } from "../features/countries/favouritesSlice";
 
-const Countries = () => {
-  const [search, setSearch] = useState("");
+const Favourites = () => {
   const dispatch = useDispatch();
-  const countriesList = useSelector((store) => store.countries.countries);
+
+  let countriesList = useSelector((state) => state.countries.countries);
   const loading = useSelector((store) => store.countries.isLoading);
+  const [search, setSearch] = useState("");
+  const [favouritesList, setFavouritesList] = useState([]);
+
+  if (favouritesList !== null) {
+    countriesList = countriesList.filter((c) =>
+      favouritesList.includes(c.name.common)
+    );
+  } else {
+    countriesList = [];
+  }
 
   useEffect(() => {
     dispatch(initializeCountries());
+    setFavouritesList(localStorage.getItem("Favourites"));
   }, [dispatch]);
 
   if (loading) {
@@ -48,6 +59,15 @@ const Countries = () => {
         </Col>
       </Row>
       <Row xs={2} md={3} lg={4} className=" g-3">
+        <Button
+          onClick={() => {
+            dispatch(clearFavourites());
+          }}
+        >
+          Clear Favourites
+        </Button>
+      </Row>
+      <Row xs={2} md={3} lg={4} className=" g-3">
         {countriesList
           .filter((c) => {
             return c.name.common.toLowerCase().includes(search.toLowerCase());
@@ -61,13 +81,17 @@ const Countries = () => {
                   state={{ country: country }}
                 >
                   <Card className="h-100">
-                    <i
-                      className="bi bi-heart-fill text-danger m-1 p-1"
-                      onClick={() =>
-                        dispatch(addFavourites(country.name.common))
-                      }
-                    ></i>
-                    <Card.Img variant="top" src={flags.svg} alt={name.common} />
+                    <Card.Img
+                      variant="top"
+                      src={flags.svg}
+                      alt={name.common}
+                      style={{
+                        objectFit: "cover",
+                        minHeight: "200px",
+                        maxHeight: "200px",
+                      }}
+                      className="rounded h-50"
+                    />
                     <Card.Body className="d-flex flex-column">
                       <Card.Title>{name.common}</Card.Title>
                       <Card.Subtitle className="mb-5 text-muted">
@@ -112,4 +136,4 @@ const Countries = () => {
   );
 };
 
-export default Countries;
+export default Favourites;
