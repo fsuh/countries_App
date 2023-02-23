@@ -1,23 +1,30 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
-
-import Card from "react-bootstrap/Card";
-import Col from "react-bootstrap/Col";
-import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
-import ListGroup from "react-bootstrap/ListGroup";
-import Row from "react-bootstrap/Row";
-import { Spinner } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import {
+  Spinner,
+  Card,
+  Col,
+  Container,
+  Form,
+  ListGroup,
+  Row,
+} from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { initializeCountries } from "../features/countries/countriesSlice";
 import { addFavourites } from "../features/countries/favouritesSlice";
+import { removeFavourite } from "../features/countries/favouritesSlice";
 
 const Countries = () => {
   const [search, setSearch] = useState("");
   const dispatch = useDispatch();
   const countriesList = useSelector((store) => store.countries.countries);
+  const favouritesList = useSelector((state) => state.favourites.favourites);
   const loading = useSelector((store) => store.countries.isLoading);
+
+  // const favIcon = () => {
+  //   dispatch(addFavourites(country.name.common));
+  //   setActive(!isActive);
+  // };
 
   useEffect(() => {
     dispatch(initializeCountries());
@@ -25,9 +32,16 @@ const Countries = () => {
 
   if (loading) {
     return (
-      <Spinner animation="border" role="status">
-        <span className="visually-hidden">Loading...</span>
-      </Spinner>
+      <Col className="text-center m-5">
+        <Spinner
+          animation="border"
+          role="status"
+          className="center"
+          variant="info"
+        >
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      </Col>
     );
   }
 
@@ -61,12 +75,22 @@ const Countries = () => {
                   state={{ country: country }}
                 >
                   <Card className="h-100">
-                    <i
-                      className="bi bi-heart-fill text-danger m-1 p-1"
-                      onClick={() =>
-                        dispatch(addFavourites(country.name.common))
-                      }
-                    ></i>
+                    {favouritesList.includes(name.common) ? (
+                      <i
+                        className={`bi bi-heart-fill text-danger m-1 p-1`}
+                        onClick={() => {
+                          dispatch(removeFavourite(name.common));
+                        }}
+                      ></i>
+                    ) : (
+                      <i
+                        className={`bi bi-heart text-danger m-1 p-1`}
+                        onClick={() => {
+                          dispatch(addFavourites(name.common));
+                        }}
+                      ></i>
+                    )}
+
                     <Card.Img variant="top" src={flags.svg} alt={name.common} />
                     <Card.Body className="d-flex flex-column">
                       <Card.Title>{name.common}</Card.Title>
