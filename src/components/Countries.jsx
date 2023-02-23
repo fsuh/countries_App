@@ -12,7 +12,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { initializeCountries } from "../features/countries/countriesSlice";
 import { addFavourites } from "../features/countries/favouritesSlice";
-import { removeFavourite } from "../features/countries/favouritesSlice";
 
 const Countries = () => {
   const [search, setSearch] = useState("");
@@ -76,12 +75,7 @@ const Countries = () => {
                 >
                   <Card className="h-100">
                     {favouritesList.includes(name.common) ? (
-                      <i
-                        className={`bi bi-heart-fill text-danger m-1 p-1`}
-                        onClick={() => {
-                          dispatch(removeFavourite(name.common));
-                        }}
-                      ></i>
+                      <i className={`bi bi-heart-fill text-danger m-1 p-1`}></i>
                     ) : (
                       <i
                         className={`bi bi-heart text-danger m-1 p-1`}
