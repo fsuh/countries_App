@@ -10,26 +10,28 @@ import {
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
-import { initializeCountries } from "../features/countries/countriesSlice";
+import {
+  getAllCountries,
+  filterRegion,
+} from "../features/countries/countriesSlice";
 import { addFavourites } from "../features/countries/favouritesSlice";
 
 const Countries = () => {
   const [search, setSearch] = useState("");
+  const [region, setRegion] = useState("");
   const dispatch = useDispatch();
-  const countriesList = useSelector((store) => store.countries.countries);
-  const favouritesList = useSelector((state) => state.favourites.favourites);
-  const loading = useSelector((store) => store.countries.isLoading);
-
-  // const favIcon = () => {
-  //   dispatch(addFavourites(country.name.common));
-  //   setActive(!isActive);
-  // };
+  const { countries, isLoading } = useSelector((store) => store.countries);
+  const { favourites } = useSelector((state) => state.favourites);
+  const handleChange = (e) => {
+    setRegion(e.target.value);
+    dispatch(filterRegion(e.target.value));
+  };
 
   useEffect(() => {
-    dispatch(initializeCountries());
+    dispatch(getAllCountries());
   }, [dispatch]);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <Col className="text-center m-5">
         <Spinner
@@ -49,21 +51,47 @@ const Countries = () => {
       <Row>
         <Col className="mt-5 d-flex justify-content-center">
           <Form>
-            <Form.Control
-              style={{ width: "18rem" }}
-              type="search"
-              className="me-2 "
-              placeholder="Search for countries"
-              aria-label="Search"
-              onChange={(e) => setSearch(e.target.value)}
-            />
+            <Row>
+              <Col>
+                <Form.Group>
+                  <Form.Control
+                    style={{ width: "18rem" }}
+                    type="search"
+                    className="me-2 "
+                    placeholder="Search for countries"
+                    aria-label="Search"
+                    onChange={(e) => setSearch(e.target.value)}
+                  />
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group>
+                  <Form.Select
+                    className="me-auto"
+                    aria-label="Default select example"
+                    onChange={handleChange}
+                  >
+                    <option>Filter by Region</option>
+                    <option value="">All Regions</option>
+                    <option value="africa">Africa</option>
+                    <option value="americas">America</option>
+                    <option value="asia">Asia</option>
+                    <option value="europe">Europe</option>
+                    <option value="oceania">Oceania</option>
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+            </Row>
           </Form>
         </Col>
       </Row>
       <Row xs={2} md={3} lg={4} className=" g-3">
-        {countriesList
+        {countries
           .filter((c) => {
-            return c.name.common.toLowerCase().includes(search.toLowerCase());
+            return (
+              c.name.common.toLowerCase().includes(search.toLowerCase()) &&
+              (region === "" || c.region.toLowerCase() === region.toLowerCase())
+            );
           })
           ?.map((country) => {
             const { name, currencies, languages, population, flags } = country;
@@ -74,7 +102,7 @@ const Countries = () => {
                   state={{ country: country }}
                 >
                   <Card className="h-100">
-                    {favouritesList.includes(name.common) ? (
+                    {favourites.includes(name.common) ? (
                       <i className={`bi bi-heart-fill text-danger m-1 p-1`}></i>
                     ) : (
                       <i

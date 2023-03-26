@@ -11,30 +11,28 @@ import {
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
-import { initializeCountries } from "../features/countries/countriesSlice";
+import { getAllCountries } from "../features/countries/countriesSlice";
 import { clearFavourites } from "../features/countries/favouritesSlice";
 
 const Favourites = () => {
   const dispatch = useDispatch();
 
-  let countriesList = useSelector((state) => state.countries.countries);
-  const loading = useSelector((state) => state.countries.isLoading);
+  let { countries } = useSelector((state) => state.countries);
+  const { isLoading } = useSelector((state) => state.countries);
   const [search, setSearch] = useState("");
-  const favouritesList = useSelector((state) => state.favourites.favourites);
+  const { favourites } = useSelector((state) => state.favourites);
 
-  if (favouritesList !== null) {
-    countriesList = countriesList.filter((c) =>
-      favouritesList.includes(c.name.common)
-    );
+  if (favourites !== null) {
+    countries = countries.filter((c) => favourites.includes(c.name.common));
   } else {
-    countriesList = [];
+    countries = [];
   }
 
   useEffect(() => {
-    dispatch(initializeCountries());
+    dispatch(getAllCountries());
   }, [dispatch]);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <Col className="text-center m-5">
         <Spinner
@@ -75,7 +73,7 @@ const Favourites = () => {
         </Button>
       </Row>
       <Row xs={2} md={3} lg={4} className=" g-3">
-        {countriesList
+        {countries
           .filter((c) => {
             return c.name.common.toLowerCase().includes(search.toLowerCase());
           })

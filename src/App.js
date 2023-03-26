@@ -4,8 +4,8 @@ import Countries from "./components/Countries";
 import CountriesSingle from "./components/CountriesSingle";
 import Home from "./components/Home";
 import Layout from "./pages/Layout";
-import Login from "./components/Login";
 import Register from "./components/Register";
+import { ToastContainer } from "react-toastify";
 
 import "bootstrap-icons/font/bootstrap-icons.css";
 import Favourites from "./components/Favourites";
@@ -19,16 +19,20 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/landing" element={<Home />} />
           <Route path="/register" element={<Register />} />
-          <Route element={<ProtectedRoute user={user} />}>
+          <Route
+            path="/"
+            element={<ProtectedRoute user={user}></ProtectedRoute>}
+          >
+            <Route index element={<Countries />} />
             <Route path="/countries" element={<Countries />} />
             <Route path="/favourities" element={<Favourites />} />
             <Route path="/countries/:single" element={<CountriesSingle />} />
           </Route>
         </Route>
       </Routes>
+      <ToastContainer position="top-center" />
     </BrowserRouter>
   );
 };

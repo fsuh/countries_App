@@ -1,19 +1,56 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { auth, registerWithEmailAndPassword } from "../auth/firebase";
+import {
+  auth,
+  registerWithEmailAndPassword,
+  logInWithEmailAndPassword,
+} from "../auth/firebase";
+import FormRow from "../components/FormRow";
+import Wrapper from "../assets/css/RegisterCss";
+import { toast } from "react-toastify";
+import Logo from "./Logo";
+
+const initialState = {
+  name: "",
+  email: "",
+  password: "",
+  isMember: true,
+};
 
 const Register = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [user, loading, error] = useAuthState(auth);
+  const [users, setUsers] = useState(initialState);
+  const [user, loading] = useAuthState(auth);
   const navigate = useNavigate();
 
-  const register = () => {
-    if (!name) alert("Please enter name");
+  // const register = () => {
+  //   const { name, email, password } = users;
+  //   if (!name) toast.error("Please enter name");
+  //   registerWithEmailAndPassword(name, email, password);
+  // };
+
+  const toogleMember = () => {
+    setUsers({ ...users, isMember: !users.isMember });
+  };
+
+  const handleChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    setUsers({ ...users, [name]: value });
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const { name, email, password, isMember } = users;
+    if (!email || !password || (!isMember && !name)) {
+      toast.error("Please fill out all fields");
+      return;
+    }
+    if (isMember) {
+      logInWithEmailAndPassword(email, password);
+      return;
+    }
     registerWithEmailAndPassword(name, email, password);
   };
 
@@ -23,31 +60,57 @@ const Register = () => {
   }, [user, loading, navigate]);
 
   return (
-    <div>
-      <input
-        type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="Full Name"
-      />
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
-      />
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-      />
-      <button onClick={register}>Register</button>
-      <div>
-        Already have an acount?
-        <Link to="/login">Login</Link>now.
-      </div>
-    </div>
+    <Wrapper className="full-page">
+      <form className="form" onSubmit={onSubmit}>
+        <Logo />
+        <h3>{users.isMember ? "Login" : " Register"}</h3>
+        {!users.isMember && (
+          <FormRow
+            type="text"
+            name="name"
+            autocomplete="name"
+            value={users.name}
+            handleChange={handleChange}
+          />
+        )}
+        <FormRow
+          type="email"
+          name="email"
+          autocomplete="email"
+          value={users.email}
+          handleChange={handleChange}
+        />
+        <FormRow
+          type="password"
+          name="password"
+          autocomplete="password"
+          value={users.password}
+          handleChange={handleChange}
+        />
+        <button type="submit" className="btn btn-block" disabled={loading}>
+          {loading ? "loading..." : "submit"}
+        </button>
+        {/* <button
+          type="button"
+          className="btn btn-block btn-hipster"
+          disabled={loading}
+          onClick={() =>
+            logInWithEmailAndPassword({
+              email: "testUser@test.com",
+              password: "secret",
+            })
+          }
+        >
+          {loading ? "loading.." : "demoUser"}
+        </button> */}
+        <p>
+          {users.isMember ? "Not yet Registered?" : "Already Registered!"}
+          <button type="button" className="member-btn" onClick={toogleMember}>
+            {users.isMember ? "Register" : "Login"}
+          </button>
+        </p>
+      </form>
+    </Wrapper>
   );
 };
 

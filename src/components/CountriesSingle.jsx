@@ -10,7 +10,6 @@ const CountriesSingle = () => {
   const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
   const country = location.state.country;
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -53,7 +52,6 @@ const CountriesSingle = () => {
         <Col>
           <h2 className="display-4">{country.name.common}</h2>
           <h3>{country.capital}</h3>
-
           {!isError && weather && (
             <div>
               <p>

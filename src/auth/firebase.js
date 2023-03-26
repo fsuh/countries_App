@@ -7,6 +7,7 @@ import {
   signOut,
 } from "firebase/auth";
 import { addDoc, collection, getFirestore } from "firebase/firestore";
+import { toast } from "react-toastify";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -33,7 +34,8 @@ const logInWithEmailAndPassword = async (email, password) => {
   try {
     await signInWithEmailAndPassword(auth, email, password);
   } catch (err) {
-    alert(err.message);
+    console.log(err.message);
+    toast.error(`${err.message}`);
   }
 };
 
@@ -49,7 +51,8 @@ const registerWithEmailAndPassword = async (name, email, password) => {
       email,
     });
   } catch (err) {
-    alert(err.message);
+    console.log(err.message);
+    toast.error(`${err.message}`);
   }
 };
 
