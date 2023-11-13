@@ -11,41 +11,45 @@ import Logo from "../components/Logo";
 import Theme from "../components/Theme";
 
 const Layout = () => {
-  return (
-    <Container fluid>
-      <Row>
-        <Col></Col>
-        <Navbar bg="light" variant="light">
-          <Container className="justify-content-end">
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-              <Nav>
-                <LinkContainer to="/">
-                  <Logo />
-                </LinkContainer>
-                <LinkContainer to="/landing">
-                  <Nav.Link>Home</Nav.Link>
-                </LinkContainer>
-                <LinkContainer to="/countries">
-                  <Nav.Link>Countries</Nav.Link>
-                </LinkContainer>
-                <LinkContainer to="/favourities">
-                  <Nav.Link>Favourites</Nav.Link>
-                </LinkContainer>
-              </Nav>
-            </Navbar.Collapse>
-            <Navbar.Collapse id="basic-navbar-nav">
-              <Theme />
-            </Navbar.Collapse>
-            <Button onClick={() => logout()}>signOut</Button>
-          </Container>
-        </Navbar>
-      </Row>
-      <Row>
-        <Outlet />
-      </Row>
-    </Container>
-  );
+	return (
+		<Container fluid>
+			<Row>
+				<Col></Col>
+				<Navbar
+					bg="light"
+					variant="light"
+					data-bs-theme="light"
+				>
+					<Container className="justify-content-end">
+						<Navbar.Toggle aria-controls="basic-navbar-nav" />
+						<Navbar.Collapse id="basic-navbar-nav">
+							<Nav>
+								<LinkContainer to="/">
+									<Logo />
+								</LinkContainer>
+								<LinkContainer to="/landing">
+									<Nav.Link>Home</Nav.Link>
+								</LinkContainer>
+								<LinkContainer to="/countries">
+									<Nav.Link>Countries</Nav.Link>
+								</LinkContainer>
+								<LinkContainer to="/favourities">
+									<Nav.Link>Favourites</Nav.Link>
+								</LinkContainer>
+							</Nav>
+						</Navbar.Collapse>
+						<Navbar.Collapse id="basic-navbar-nav">
+							<Theme />
+						</Navbar.Collapse>
+						<Button onClick={() => logout()}>signOut</Button>
+					</Container>
+				</Navbar>
+			</Row>
+			<Row>
+				<Outlet />
+			</Row>
+		</Container>
+	);
 };
 
 export default Layout;
