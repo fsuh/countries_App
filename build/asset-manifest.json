@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/countries_App/static/css/main.ce143b0f.css",
-    "main.js": "/countries_App/static/js/main.9d862d01.js",
-    "static/media/bootstrap-icons.woff?": "/countries_App/static/media/bootstrap-icons.6959d0d983ee318f8880.woff",
-    "static/media/bootstrap-icons.woff2?": "/countries_App/static/media/bootstrap-icons.b2e5aab643c6f0fd2da6.woff2",
+    "main.css": "/countries_App/static/css/main.f5accb08.css",
+    "main.js": "/countries_App/static/js/main.fd9993e7.js",
+    "static/media/bootstrap-icons.woff?": "/countries_App/static/media/bootstrap-icons.449ad8adf6ae0424b7ed.woff",
+    "static/media/bootstrap-icons.woff2?": "/countries_App/static/media/bootstrap-icons.dea24bf5a7646d8b84e7.woff2",
     "static/media/worldMap.svg": "/countries_App/static/media/worldMap.9b9d5e826d380311bdc0c98ce2591c55.svg",
     "static/media/logo.svg": "/countries_App/static/media/logo.b67c8550404d439bbad19d50f91aa0d4.svg",
     "index.html": "/countries_App/index.html",
-    "main.ce143b0f.css.map": "/countries_App/static/css/main.ce143b0f.css.map",
-    "main.9d862d01.js.map": "/countries_App/static/js/main.9d862d01.js.map"
+    "main.f5accb08.css.map": "/countries_App/static/css/main.f5accb08.css.map",
+    "main.fd9993e7.js.map": "/countries_App/static/js/main.fd9993e7.js.map"
   },
   "entrypoints": [
-    "static/css/main.ce143b0f.css",
-    "static/js/main.9d862d01.js"
+    "static/css/main.f5accb08.css",
+    "static/js/main.fd9993e7.js"
   ]
 }
